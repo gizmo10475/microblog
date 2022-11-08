@@ -1,4 +1,5 @@
 Microblog
+[![Python application](https://github.com/gizmo10475/microblog/actions/workflows/python-app.yml/badge.svg)](https://github.com/gizmo10475/microblog/actions/workflows/python-app.yml)
 ===================
 
 [![Join the chat at https://gitter.im/dbwebb-se/devops](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dbwebb-se/devops?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
