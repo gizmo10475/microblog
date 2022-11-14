@@ -218,8 +218,8 @@ install-deploy:
 
 
 # target: test-docker                    - test the code with docker
-.PHONY: test-docker
-test-docker:
-	@$(ECHO) "Testing code with docker"
-	@docker compose run --rm test
+# .PHONY: test-docker
+# test-docker:
+# 	@$(ECHO) "Testing code with docker"
+# 	@docker compose run --rm test
 
