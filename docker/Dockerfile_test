@@ -1,13 +1,20 @@
 FROM python:3.8-alpine3.16
-
-WORKDIR /home/installation
-
-COPY requirements requirements
-
-RUN python -m venv venv \
-    && venv/bin/pip3 install -r requirements.txt \
-    && chown -R microblog:microblog ./
-
-
+RUN adduser -D microblog
 
 WORKDIR /home/microblog
+
+COPY requirements.txt test.sh Makefile pytest.ini microblog.py .coveragerc .pylintrc ./
+COPY requirements requirements
+COPY app app
+COPY tests tests
+
+RUN python -m venv venv \
+    && apk add make=4.3-r0 --no-cache \
+    && venv/bin/pip3 install -r requirements/test.txt \
+    && chown -R microblog:microblog ./
+
+VOLUME ["./app", "./tests"]
+
+
+ENTRYPOINT ["./test.sh"]
+
