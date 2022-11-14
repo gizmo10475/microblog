@@ -13,6 +13,9 @@ on:
     tags:
       - "v*.*.*"
   workflow_call:
+    secrets:
+      DOCKER_USERNAME:
+        required: true
 
 jobs:
 
