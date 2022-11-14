@@ -16,6 +16,8 @@ on:
     secrets:
       DOCKER_USERNAME:
         required: true
+      DOCKERHUB_PASSWORD:
+        required: true
 
 jobs:
 
