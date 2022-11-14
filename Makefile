@@ -215,3 +215,11 @@ install-test:
 install-deploy:
 	${pip} install -r requirements/deploy.txt
 	cd ansible && ansible-galaxy install -r requirements.yml
+
+
+# target: test-docker                    - test the code with docker
+.PHONY: test-docker
+test-docker:
+	@$(ECHO) "Testing code with docker"
+	@docker compose run --rm test
+
