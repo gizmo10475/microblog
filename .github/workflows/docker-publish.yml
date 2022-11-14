@@ -19,6 +19,10 @@ on:
 
 jobs:
 
+  test_the_code:
+    uses: ./.github/workflows/python-app.yml
+
+
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
