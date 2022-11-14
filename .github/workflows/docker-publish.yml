@@ -16,9 +16,10 @@ on:
     secrets:
       DOCKER_USERNAME:
         required: true
+      DOCKERHUB_PASSWORD:
+        required: true
 
 jobs:
-
   test_the_code:
     uses: ./.github/workflows/python-app.yml
 
