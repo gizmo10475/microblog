@@ -10,7 +10,9 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [ "master" ]
+    tags:
+      - "v*.*.*"
+  workflow_call:
 
 jobs:
 
