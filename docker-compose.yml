@@ -1,0 +1,35 @@
+version: '3'
+services:
+  prodserver:
+    image: 'eddie66/microblog:1.0.0-prod'
+    container_name: 'microblog'
+    ports:
+        - '8000:5000'
+    links:
+        - 'db:dbserver'
+    environment:
+        DATABASE_URL: 'mysql+pymysql://microblog:password@dbserver/microblog'
+    depends_on:
+        - 'db'
+    restart:
+        'always'
+
+  db:
+    image: 'mysql/mysql-server:5.7'
+    volumes:
+      - './data/db:/var/lib/mysql'
+    container_name: 'mysql2'
+    environment:
+      MYSQL_DATABASE: 'microblog'
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: 'microblog'
+      MYSQL_PASSWORD: 'password'
+    restart:
+        'always'
+
+  test:
+    image: 'eddie66/microblog:1.0.0-test'
+    container_name: 'microblog-test'
+    volumes:
+        - './tests:/home/microblog/tests'
+        - './app:/home/microblog/app'
