@@ -1,0 +1,52 @@
+---
+- name: update apt
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: yes
+
+- name: install packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+
+- name: add GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: add docker repository to apt
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian buster stable
+    state: present
+
+- name: install docker python modules
+  pip:
+    name: "{{ docker_pip }}"
+    state: present
+    executable: pip3
+
+- name: install docker
+  apt:
+    name: "{{ docker_install }}"
+    state: present
+
+- name: start and enable docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: start docker container for database
+  docker_container:
+    name: database
+    image: mysql/mysql-server:5.7
+    volumes:
+      - "/home/deploy/db:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    env:
+      MYSQL_DATABASE: "{{ database }}"
+      MYSQL_ROOT_PASSWORD: "{{ database_password_root }}"
+      MYSQL_USER: "{{ database }}"
+      MYSQL_PASSWORD: "{{ database_password }}"

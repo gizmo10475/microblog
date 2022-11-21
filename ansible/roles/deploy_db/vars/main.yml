@@ -1,0 +1,21 @@
+ansible_python_interpreter: /usr/bin/python3
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+  - python3-pip
+  - python3-setuptools
+  - python-setuptools
+  - virtualenv
+  - aptitude
+  - gnupg2
+
+docker_install:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-compose-plugin
+
+docker_pip:
+  - docker

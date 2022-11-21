@@ -1,0 +1,10 @@
+---
+root_password: $6$QlElgl/AKU$CftIl41JHDcf9X58IxpTUtg.WVUVzXu1Iafv15.wPLPPEuP2dFq9Hz2xbcYU2scF5J0r0cxXGY1UFkXNXIMgf/
+
+server_user: deploy
+server_user_pass: $6$NkCxB8ANbZ$6fDhViA6jFmnfliAtiQhUYVeCBaEL2QtO4hrsm8cxpIugahX/6w.urY8jX0iIw36xnYzkDzJ3zhepm/7Rp43N/
+server_user_groups:
+    -   sudo
+
+pub_ssh_key_location:
+    -   ~/.ssh/azurre_rsa.pub

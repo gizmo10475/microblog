@@ -1,0 +1,53 @@
+---
+- name: install packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+
+- name: check if certificates exist
+  stat:
+    path: /etc/letsencrypt/live/{{ domain_name }}/cert.pem
+  register: letsencrypt_cert
+
+- debug: msg="{{ letsencrypt_cert.stat.exists }}"
+
+- name: stop nginx
+  service:
+    name: nginx
+    state: stopped
+  when: not letsencrypt_cert.stat.exists
+
+- name: generate certificates for https
+  shell: "certbot certonly --standalone --noninteractive --expand --agree-tos --email {{ admin_email }} -d {{ domain_name }} -d www.{{ domain_name }}"
+  when: not letsencrypt_cert.stat.exists
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
+  when: not letsencrypt_cert.stat.exists
+
+- name: remove default config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: copy nginx.conf
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - restart nginx
+
+- name: copy load-balancer.conf
+  template:
+    src: load-balancer.conf.j2
+    dest: /etc/nginx/sites-available/load-balancer.conf
+  notify:
+    - restart nginx
+
+- name: Create a symbolic link to sites-enabled
+  file:
+    src: /etc/nginx/sites-available/load-balancer.conf
+    path: /etc/nginx/sites-enabled/load-balancer.conf
+    state: link

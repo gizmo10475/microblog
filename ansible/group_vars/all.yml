@@ -1,13 +1,21 @@
 ---
 # Here you can add variables that will be available for all hosts.
 region: northeurope
-resource_group: <resource-id> # Change me
-domain_name: <domain> # Change me
+resource_group: DIDA-EDFA18-DV1658-H22-LP2 # Change me
+domain_name: eddieblog.me # Change me
+admin_email: edfa18@student.bth.se
 
 root_user: azureuser
+serrver_user: deploy
 
 vmtags:
-    StudentId: "<akronym>" # Change me
+    StudentId: "edfa18" # Change me
 
+docker_username: eddie66
+docker_password: dckr_pat_9K8fK8CUC5bU5yIZihD6blLP4AM
 
-pub_ssh_key_location: '/home/<user>/.ssh/<key-name>.pub' # Change me, your local ssh key!
+database_password_root: bbb222
+database_password: aaa111
+database: microblog
+
+pub_ssh_key_location: '/root/.ssh/azurre_rsa.pub' # Change me, your local ssh key!
