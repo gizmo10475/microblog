@@ -51,3 +51,64 @@
     src: /etc/nginx/sites-available/load-balancer.conf
     path: /etc/nginx/sites-enabled/load-balancer.conf
     state: link
+
+
+- name: restart nginx
+  service: name=nginx state=restarted
+
+
+
+
+- name: install packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+
+- name: add GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: add docker repository to apt
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian buster stable
+    state: present
+
+- name: install docker python modules
+  pip:
+    name: "{{ docker_pip }}"
+    state: present
+    executable: pip3
+
+- name: install docker
+  apt:
+    name: "{{ docker_install }}"
+    state: present
+
+- name: start and enable docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: docker login
+  docker_login:
+    username: "{{ docker_username }}"
+    password: "{{ docker_password }}"
+
+
+- name: "Prometheus exporter"
+  docker_container:
+    name: nginx-prometheus
+    image: nginx/nginx-prometheus-exporter:0.4.2
+    ports:
+      - 9113:9113
+    # networks:
+    #   - name: monitoring
+    command:
+      - nginx.scrape-uri=https://{{ domain_name }}/metrics
+      - nginx.retries=10
+      - nginx.ssl-verify=false
+      - web.telemetry-path=/prometheus
+    restart_policy: unless-stopped
+    state: started

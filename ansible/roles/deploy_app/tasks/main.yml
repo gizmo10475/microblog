@@ -45,7 +45,7 @@
 - name: start docker container for microblog
   docker_container:
     name: microblog
-    image: eddie66/microblog:12.1.0
+    image: eddie66/microblog:flask-exporter
     ports:
       - "8000:5000"
     env:

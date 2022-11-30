@@ -1,11 +1,12 @@
 ansible_python_interpreter: /usr/bin/python3
 packages:
-  - nginx
-  - python-certbot-nginx
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
   - python3-pip
   - virtualenv
   - python3-setuptools
-
 
 docker_install:
   - docker-ce

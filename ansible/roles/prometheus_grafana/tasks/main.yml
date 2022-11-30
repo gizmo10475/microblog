@@ -1,0 +1,116 @@
+---
+
+# - name: update apt
+#   apt:
+#     update_cache: yes
+#     cache_valid_time: 3600
+#     upgrade: yes
+
+# - name: install packages
+#   apt:
+#     name: "{{ packages }}"
+#     state: present
+
+# - name: add GPG key
+#   apt_key:
+#     url: https://download.docker.com/linux/debian/gpg
+#     state: present
+
+# - name: add docker repository to apt
+#   apt_repository:
+#     repo: deb https://download.docker.com/linux/debian buster stable
+#     state: present
+
+# - name: install docker python modules
+#   pip:
+#     name: "{{ docker_pip }}"
+#     state: present
+#     executable: pip3
+
+# - name: install docker
+#   apt:
+#     name: "{{ docker_install }}"
+#     state: present
+
+# - name: start and enable docker
+#   service:
+#     name: docker
+#     state: started
+#     enabled: yes
+
+# - name: docker login
+#   docker_login:
+#     username: "{{ docker_username }}"
+#     password: "{{ docker_password }}"
+
+# -   name: Docker network
+#     docker_network:
+#         name: monitoring
+
+
+
+# - name: node exporter
+#   docker_container:
+#     name: node
+#     image: prom/node-exporter:v1.3.0
+#     volumes:
+#       - /proc:/host/proc:ro
+#       - /sys:/host/sys:ro
+#       - /:/rootfs:ro
+#     ports:
+#       - 9100:9100
+#     networks:
+#       - name: monitoring
+#     command:
+#     - "--path.procfs=/host/proc"
+#     - "--path.rootfs=/rootfs"
+#     - "--path.sysfs=/host/sys"
+#     - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+#     state: started
+#     restart_policy: unless-stopped
+
+
+
+# -   name: Template nginx config to server (prometheus)
+#     template:
+#         src: prometheus.yml.j2
+#         dest: /tmp/prometheus.yml
+#         force: yes
+
+# -   name: Pull prom/statsd-exporter
+#     command: docker pull prom/prometheus
+
+# -   name: "Launch docker container with microblog applocation (prometheus)"
+#     docker_container:
+#         name: "prom"
+#         image: "prom/prometheus"
+#         restart_policy: "unless-stopped"
+#         volumes:
+#             - "/tmp/prometheus.yml:/etc/prometheus/prometheus.yml"
+#         network_mode: host
+#         recreate: yes
+
+-   name: Template nginx config to server (grafana)
+    template:
+        src: templates/grafana.ini.j2
+        dest: /tmp/grafana.ini
+        force: yes
+
+
+- name: "Launch docker container with microblog applocation (grafana)"
+  docker_container:
+    name: grafana
+    image: grafana/grafana:8.2.4
+    state: started
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - "/tmp/grafana.ini:/etc/grafana/grafana.ini"
+    mounts:
+      - source: grafana
+        target: /etc/grafana
+        read_only: no
+        type: volume
+    restart_policy: unless-stopped
+
