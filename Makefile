@@ -144,7 +144,7 @@ run-test:
 
 ## target: exec-tests                   - Run all tests in tests/ with coverage.py
 .PHONY: exec-tests
-exec-tests: test-unit test-integration
+exec-tests: test-unit test-integration bandit
 
 
 
@@ -153,6 +153,12 @@ exec-tests: test-unit test-integration
 test: validate exec-tests
 	${py} -m coverage report  --rcfile=.coveragerc
 	$(MAKE) clean-cov
+	$(MAKE) bandit
+
+
+# target: bandit                         - Run bandit
+.PHONY: bandit
+	bandit -r app
 
 
 
