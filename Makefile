@@ -156,11 +156,17 @@ test: validate exec-tests
 	$(MAKE) bandit
 
 
-# target: bandit                         - Run bandit
+# target: bandit                         - Run bandit.
 .PHONY: bandit
-	bandit -r app
+bandit:
+	@${py} -m bandit -r app
 
 
+
+# target: zap                         - Run zap.
+.PHONY: zap
+zap:
+	docker run -t owasp/zap2docker-weekly zap-baseline.py -t https://eddieblog.me
 
 ## target: test-html                    - Run tests and display detailed code coverage with html
 .PHONY: test-html
