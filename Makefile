@@ -10,7 +10,7 @@
 
 # Set default target
 .DEFAULT_GOAL := test
-
+export PROMETHEUS_MULTIPROC_DIR=/tmp
 # Decide if use python3 or python
 ifeq (, $(@shell which python3))
 	py = python3
