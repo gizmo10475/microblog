@@ -1,0 +1,40 @@
+# microblog-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microblog
+spec:
+  selector:
+    matchLabels:
+      app: microblog
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: microblog
+    spec:
+      containers:
+        - image: eddie66/microblog:flask-exporter
+          name: microblog
+          resources:
+            requests:
+              cpu: 250m
+            limits:
+              cpu: 500m
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: DB_PASSWORD
+            - name: DATABASE_URL
+              value: mysql+pymysql://microblog:$(DB_PASSWORD)@mysql/microblog
+          ports:
+          - containerPort: 5000
+            name: microblog
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 15
